@@ -51,6 +51,8 @@ namespace CreateRemoteThread
             Console.WriteLine("[+] Thread handle = {0}", hThread.ToInt64().ToString("x2"));
         }
 
+        //  ============================ PInvoke - Ignore me ============================
+
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern IntPtr OpenProcess(ProcessAccessFlags processAccess, bool bInheritHandle, int processId);
 
