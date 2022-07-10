@@ -18,7 +18,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncryptCreateRemoteThread",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueueUserAPC", "QueueUserAPC\QueueUserAPC.csproj", "{2305715B-86E0-4494-842F-D4D3D027A50F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPIDSpoofing", "..\PPIDSpoofing\PPIDSpoofing.csproj", "{72EFCF43-3F71-46BF-B131-7FE65E7DF4ED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PPIDSpoofing", "PPIDSpoofing\PPIDSpoofing.csproj", "{63546106-8DCD-4554-BBC1-C6DACF3F0DCB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -68,14 +68,14 @@ Global
 		{2305715B-86E0-4494-842F-D4D3D027A50F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2305715B-86E0-4494-842F-D4D3D027A50F}.Release|x64.ActiveCfg = Release|Any CPU
 		{2305715B-86E0-4494-842F-D4D3D027A50F}.Release|x64.Build.0 = Release|Any CPU
-		{72EFCF43-3F71-46BF-B131-7FE65E7DF4ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{72EFCF43-3F71-46BF-B131-7FE65E7DF4ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{72EFCF43-3F71-46BF-B131-7FE65E7DF4ED}.Debug|x64.ActiveCfg = Debug|x64
-		{72EFCF43-3F71-46BF-B131-7FE65E7DF4ED}.Debug|x64.Build.0 = Debug|x64
-		{72EFCF43-3F71-46BF-B131-7FE65E7DF4ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{72EFCF43-3F71-46BF-B131-7FE65E7DF4ED}.Release|Any CPU.Build.0 = Release|Any CPU
-		{72EFCF43-3F71-46BF-B131-7FE65E7DF4ED}.Release|x64.ActiveCfg = Release|Any CPU
-		{72EFCF43-3F71-46BF-B131-7FE65E7DF4ED}.Release|x64.Build.0 = Release|Any CPU
+		{63546106-8DCD-4554-BBC1-C6DACF3F0DCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63546106-8DCD-4554-BBC1-C6DACF3F0DCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63546106-8DCD-4554-BBC1-C6DACF3F0DCB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{63546106-8DCD-4554-BBC1-C6DACF3F0DCB}.Debug|x64.Build.0 = Debug|Any CPU
+		{63546106-8DCD-4554-BBC1-C6DACF3F0DCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63546106-8DCD-4554-BBC1-C6DACF3F0DCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63546106-8DCD-4554-BBC1-C6DACF3F0DCB}.Release|x64.ActiveCfg = Release|Any CPU
+		{63546106-8DCD-4554-BBC1-C6DACF3F0DCB}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
