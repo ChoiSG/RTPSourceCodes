@@ -4,6 +4,13 @@
 #include <map>
 #include <string>
 
+/*
+	All credits to 
+	- https://github.com/am0nsec/HellsGate/tree/master/HellsGate
+	- https://github.com/Crummie5/FreshyCalls
+	- https://alice.climent-pommeret.red/posts/direct-syscalls-hells-halos-syswhispers2/
+*/
+
 int main(void) {
 	// PEB and NTDLL from LDR_DATA
 	PPEB peb = (PPEB)__readgsqword(0x60); // "PEB at the GS register with a 96byte (0x60) offset" 
@@ -93,7 +100,7 @@ int main(void) {
 		syscallNumber++;
 	}
 
-	// Print stuff out 
+	// Print stuff 
 	for (auto& kv : funcAddrNameMap) {
 		printf("[+] Function Address: 0x%p, Function Name: %s\n", (void*)kv.first, kv.second.c_str());
 	}
