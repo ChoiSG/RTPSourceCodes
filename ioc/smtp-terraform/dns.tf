@@ -1,41 +1,43 @@
 // Mail section 
 
 resource "digitalocean_record" "mail" {
-  domain = var.domain
+  domain = digitalocean_domain.default.name
   type   = "A"
-  name   = "${var.mail}"
+  name   = var.mail
   value  = digitalocean_droplet.mail.ipv4_address
   ttl    = 600
 }
 
 resource "digitalocean_record" "mail_mx" {
-  domain   = var.domain
+  domain   = digitalocean_domain.default.name
   type     = "MX"
   name     = "@"
-  value    = "${var.mail}.${var.domain}."
+  value    = "${var.mail}.${digitalocean_domain.default.name}."
   priority = 10
   ttl      = 600
 }
 
 resource "digitalocean_record" "dkim" {
-  domain = var.domain
-  type   = "TXT"
-  name   = "mail._domainkey"
-  value  = local.dkim_output
-  ttl    = 600
-  depends_on = [digitalocean_droplet.mail]
+  domain     = digitalocean_domain.default.name
+  type       = "TXT"
+  name       = "mail._domainkey"
+  ttl        = 600
+  value      = local.dkim_output
+  depends_on = [null_resource.fetch_dkim_output]
 }
 
+
 resource "digitalocean_record" "spf" {
-  domain = var.domain
+  domain = digitalocean_domain.default.name
   type   = "TXT"
   name   = "@"
   value  = "v=spf1 a mx ip4:${digitalocean_droplet.mail.ipv4_address} ~all"
   ttl    = 600
 }
 
+// dmarc with v=DMARC1; p=reject 
 resource "digitalocean_record" "dmarc" {
-  domain = var.domain
+  domain = digitalocean_domain.default.name
   type   = "TXT"
   name   = "_dmarc"
   value  = "v=DMARC1; p=reject"
@@ -44,9 +46,9 @@ resource "digitalocean_record" "dmarc" {
 
 // gophish section 
 resource "digitalocean_record" "gophish" {
-  domain = var.domain
+  domain = digitalocean_domain.default.name
   type   = "A"
-  name   = "${var.gophish}"
+  name   = var.gophish
   value  = digitalocean_droplet.gophish.ipv4_address
   ttl    = 600
 }

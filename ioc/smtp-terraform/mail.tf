@@ -59,6 +59,10 @@ resource "digitalocean_droplet" "mail" {
       echo localhost >> /etc/opendkim/TrustedHosts
       echo 127.0.0.1 >> /etc/opendkim/TrustedHosts
 
+      # Restarting services. This might be changed to a reboot later on. Need testing. Terraform -> wait 10 min -> mail-tester
+      systemctl restart opendkim.service
+      systemctl restart postfix.service
+
       # Fetching dkim.txt 
       cp /root/dkim.txt /tmp/dkim_output.txt
       SCRIPT
@@ -79,25 +83,24 @@ resource "digitalocean_droplet" "mail" {
     source      = "./configs/header_checks"
     destination = "/etc/postfix/header_checks"
   }
+}
 
-  provisioner "local-exec" {
-    command = "scp -i ${var.ssh_private_key} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@${self.ipv4_address}:/tmp/dkim_output.txt ${path.module}/dkim_output.txt"
+// Null resource to prevent race condition
+resource "null_resource" "fetch_dkim_output" {
+  triggers = {
+    droplet_id = digitalocean_droplet.mail.id
   }
 
+  provisioner "local-exec" {
+    command = "scp -i ${var.ssh_private_key} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@${digitalocean_droplet.mail.ipv4_address}:/tmp/dkim_output.txt ${path.module}/dkim_output.txt"
+  }
 }
 
 locals {
-  dkim_output = fileexists("${path.module}/dkim_output.txt") ? trimspace(file("${path.module}/dkim_output.txt")) : ""
+  dkim_output = fileexists("${path.module}/dkim_output.txt") && length(null_resource.fetch_dkim_output.id) > 0 ? trimspace(file("${path.module}/dkim_output.txt")) : ""
 }
 
 output "dkim_output" {
   value     = local.dkim_output
   sensitive = true
-}
-
-resource "digitalocean_project_resources" "mail" {
-  project = var.projectID
-  resources = [
-    digitalocean_droplet.mail.urn
-  ]
 }
