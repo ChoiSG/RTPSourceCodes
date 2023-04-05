@@ -60,8 +60,10 @@ resource "digitalocean_droplet" "mail" {
       echo 127.0.0.1 >> /etc/opendkim/TrustedHosts
 
       # Restarting services. This might be changed to a reboot later on. Need testing. Terraform -> wait 10 min -> mail-tester
+      sleep 2
       systemctl restart opendkim.service
       systemctl restart postfix.service
+      sleep 2
 
       # Fetching dkim.txt 
       cp /root/dkim.txt /tmp/dkim_output.txt

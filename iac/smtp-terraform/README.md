@@ -1,4 +1,6 @@
 # SMTP Terraform 
+https://www.레드팀.com/infrastructure/mail-terraform
+
 Simple SMTP terraform that builds a mail server and a gophish server on DigitalOcean. 
 All credits goes to the authors in the credit section, the terraform scripts were recreated for my personal research and educational purposes. 
 

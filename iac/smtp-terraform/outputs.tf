@@ -9,7 +9,7 @@ output "outputs" {
   Gophish rid changed to: clientID
 
   // TODOs 
-  1. Start gophish with: 
-  ssh -i ${var.ssh_private_key} root@${digitalocean_droplet.gophish.ipv4_address} -L 3333:127.0.0.1:3333
+  Start gophish with: 
+  ssh -i ${var.ssh_private_key} root@${var.gophish}.${var.domain} -L 3333:127.0.0.1:3333
   EOF 
 }
