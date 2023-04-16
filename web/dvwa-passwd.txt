@@ -1,0 +1,14 @@
+root
+admin
+administrator
+passwd
+toor
+ubuntu
+ec2-user
+secret
+login
+password
+wrong
+right
+hello
+world
