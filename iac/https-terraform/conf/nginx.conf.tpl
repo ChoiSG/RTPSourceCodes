@@ -94,7 +94,7 @@ http {
 
         location / {
             if ($whitelist_ua = 0) {
-                return 301 https://www.notion.so;
+                return 301 https://www.google.com;
             }
             try_files $uri $uri/ @c2;
         }

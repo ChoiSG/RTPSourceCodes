@@ -10,13 +10,15 @@ Redirector Configuration:
 
 1. IP blocklist of famous scanners, bad IP ranges, etc. 
 2. Allowlisted User-Agent string 
-3. Redirects any bad traffic to www.notion.so 
+3. Redirects any bad traffic to www.google.com by default 
 
 ## Prerequisites 
 1. Create AWS Route53 Hosted zone. Then, get the Hosted Zone ID from Route53 (`/route53/v2/hostedzones`) and update `variables.tf`.
 2. Change domain registrar's nameserver to AWS's NS 
 3. `aws configure` with your terraform IAM user creds from AWS 
 4. Update `variables.tf` 
+
+(Optional) 5. If you have custom nginx.conf from havoc2nginx or cs2nginx, place it in the ./conf/nginx.conf and terraform will use that config file.
 
 ## Usage 
 ```
