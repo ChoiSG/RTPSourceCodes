@@ -396,3 +396,6 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+fullchain.pem
+privkey.pem

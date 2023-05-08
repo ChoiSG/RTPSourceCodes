@@ -29,17 +29,6 @@ resource "null_resource" "http_redirector_provision" {
     destination = "/tmp/nginx-blocklist.conf"
   }
 
-	provisioner "file" {
-		source      = "${path.module}/conf/nginx.conf"
-		destination = "/tmp/nginx.conf"
-	}
-
-	provisioner "remote-exec" {
-		inline = [
-			"sudo mv /tmp/nginx-blocklist.conf /etc/nginx-blocklist.conf"
-		]
-	}
-
   provisioner "remote-exec" {
     inline = [
       <<SCRIPT
@@ -47,14 +36,12 @@ resource "null_resource" "http_redirector_provision" {
 			sudo apt update -y 
 			sudo apt install nginx certbot python3-certbot-nginx -y 
 			sudo rm /etc/nginx/sites-enabled/default
-
 			sudo mv /var/www/html/index.nginx-debian.html /var/www/html/index.html 
-			sudo mv /tmp/nginx.conf /etc/nginx/nginx.conf
-
-			echo '${templatefile("${path.module}/conf/default.conf.tpl", { domain_name = var.domain_name, user_agent = var.user_agent })}' | sudo tee /etc/nginx/sites-enabled/default 
+      sudo mv /tmp/nginx-blocklist.conf /etc/nginx-blocklist.conf
+			
+      echo '${templatefile("${path.module}/conf/nginx.conf.tpl", { domain_name = var.domain_name, user_agent = var.user_agent })}' | sudo tee /etc/nginx/nginx.conf
 
 			sudo certbot --nginx -d ${var.a_record_redirector} --non-interactive --agree-tos -m webmaster@${var.domain_name}
-
 			sudo systemctl restart nginx 
 
 			SCRIPT
@@ -65,7 +52,6 @@ resource "null_resource" "http_redirector_provision" {
     command = <<SCRIPT
 			ssh -i ${var.ssh_private_key} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@${aws_instance.http_redirector.public_ip} "sudo cat /etc/letsencrypt/live/${var.a_record_redirector}/fullchain.pem" > ./fullchain.pem
 			ssh -i ${var.ssh_private_key} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@${aws_instance.http_redirector.public_ip} "sudo cat /etc/letsencrypt/live/${var.a_record_redirector}/privkey.pem" > ./privkey.pem
-
 			SCRIPT  
   }
 }

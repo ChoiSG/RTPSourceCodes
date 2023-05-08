@@ -59,3 +59,4 @@ ssh -i <ssh-priv-key> ubuntu@<redir-dns> -o StrictHostKeyChecking=no -o UserKnow
 ## Reference 
 - IP Blocklist: https://github.com/mgeeky/RedWarden
 - IP Blocklist: https://github.com/fin3ss3g0d/evilgophish
+- Nginx configuration: https://github.com/threatexpress/cs2modrewrite

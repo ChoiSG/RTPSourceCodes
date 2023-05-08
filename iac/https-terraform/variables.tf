@@ -37,12 +37,12 @@ variable "projectname" {
 
 variable "ssh_public_key" {
   description = "SSH public key file of the operator"
-  default     = "./groot-redteam.pub"
+  default     = "/root/grootredteam/grootssh.pub"
 }
 
 variable "ssh_private_key" {
   description = "SSH private key of the operator"
-  default     = "./groot-redteam"
+  default     = "/root/grootredteam/grootssh"
 }
 
 variable "vpc_cidr" {
@@ -53,9 +53,4 @@ variable "vpc_cidr" {
 variable "public_subnet_cidr" {
   description = "CIDR block for public subnet"
   default     = "10.100.1.0/24"
-}
-
-variable "operatorcidr" {
-  description = "CIDR block of the operator - usually /32 for home/office IP address"
-  default     = "32"
 }
